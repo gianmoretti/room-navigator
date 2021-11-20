@@ -1,4 +1,5 @@
-FROM node
+FROM node:12.16.1
+
 
 # Create app directory
 RUN mkdir -p /mnt

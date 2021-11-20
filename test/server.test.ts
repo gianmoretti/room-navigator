@@ -23,13 +23,13 @@ describe('API services test', () => {
       ]);
   });
 
-  it('GET / Hello API Request', async () => {
+  it('POST / Hello API Request', async () => {
     const result = await request(cut).get('/');
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('Welcome!');
   });
 
-  it('GET calcPath API request with all params correctly set', async () => {
+  it('POST calc-path API request with all params correctly set', async () => {
     const inputRoomMap = {
       rooms: [
         {
@@ -70,9 +70,9 @@ describe('API services test', () => {
     };
 
     const result = await request(cut)
-      .get('/calcPath')
+      .post('/calc-path')
+      .send(inputRoomMap)
       .query({
-        roomMap: `${JSON.stringify(inputRoomMap)}`,
         startingRoom: '1',
         objectsToCollect: 'Knife,Ball',
       });
@@ -87,17 +87,17 @@ describe('API services test', () => {
     expect(result.text).toEqual(expectedResult);
   });
 
-  it('GET calcPath API Request with missing params', async () => {
-    const result = await request(cut).get('/calcPath');
+  it('POST calc-path API Request with missing params', async () => {
+    const result = await request(cut).post('/calc-path');
     expect(result.status).toEqual(404);
     expect(result.text).toEqual('Missing Parameter');
   });
 
-  it('GET calcPath API Request with wrong format roomMap param', async () => {
+  it('POST calc-path API Request with wrong format rooms body', async () => {
     const result = await request(cut)
-      .get('/calcPath')
+      .post('/calc-path')
+      .send({rooms: 'blabla'})
       .query({
-        roomMap: 'blabla',
         startingRoom: '1',
         objectsToCollect: 'Knife,Ball',
       });
@@ -105,11 +105,11 @@ describe('API services test', () => {
     expect(result.text).toMatch(/Parameter format wrong/);
   });
 
-  it('GET calcPath API Request with wrong format roomMap object param', async () => {
+  it('POST calc-path API Request with wrong format roomMap object param', async () => {
     const result = await request(cut)
-      .get('/calcPath')
+      .post('/calc-path')
+      .send({roomMap: '{"blabla": "bleble"}'})
       .query({
-        roomMap: '{"blabla": "bleble"}',
         startingRoom: '1',
         objectsToCollect: 'Knife,Ball',
       });
@@ -117,7 +117,7 @@ describe('API services test', () => {
     expect(result.text).toEqual('Parameter format wrong - [roomMap]');
   });
 
-  it('GET calcPath API Request with wrong format roomMap object param', async () => {
+  it('POST calc-path API Request with wrong format roomMap object param', async () => {
     const inputRoomMap = {
       rooms: [
         {
@@ -136,9 +136,9 @@ describe('API services test', () => {
       ],
     };
     const result = await request(cut)
-      .get('/calcPath')
+      .post('/calc-path')
+      .send(inputRoomMap)
       .query({
-        roomMap: `${JSON.stringify(inputRoomMap)}`,
         startingRoom: '1',
         objectsToCollect: 'Knife,Ball',
       });
@@ -146,7 +146,7 @@ describe('API services test', () => {
     expect(result.text).toEqual('Parameter format wrong - [roomMap]');
   });
 
-  it('GET calcPath API Request with wrong format startingRoom param', async () => {
+  it('POST calc-path API Request with wrong format startingRoom param', async () => {
     const inputRoomMap = {
       rooms: [
         {
@@ -167,7 +167,8 @@ describe('API services test', () => {
     };
 
     const result = await request(cut)
-      .get('/calcPath')
+      .post('/calc-path')
+      .send(inputRoomMap)
       .query({
         roomMap: `${JSON.stringify(inputRoomMap)}`,
         startingRoom: 'blablabla',
@@ -177,7 +178,7 @@ describe('API services test', () => {
     expect(result.text).toEqual('Parameter format wrong - [startingRoom]');
   });
 
-  it('GET calcPath API Request with startingRoom param value too big', async () => {
+  it('POST calc-path API Request with startingRoom param value too big', async () => {
     const inputRoomMap = {
       rooms: [
         {
@@ -198,7 +199,8 @@ describe('API services test', () => {
     };
 
     const result = await request(cut)
-      .get('/calcPath')
+      .post('/calc-path')
+      .send(inputRoomMap)
       .query({
         roomMap: `${JSON.stringify(inputRoomMap)}`,
         startingRoom: '100',

@@ -7,19 +7,18 @@ import { CalcPathService } from './calc-path-service';
 import { logger } from './configs';
 import { isRoom, Room } from './definitions';
 
-interface RoomMapInputParam {
+interface RoomMapInputBody {
   rooms: Room[];
 }
 
-interface InputParams {
-  roomMap: string;
+interface InputQueryParams {
   startingRoom: string;
   objectsToCollect: string;
 }
 
 function isRoomMapInputParam(
   arg: any,
-): arg is RoomMapInputParam {
+): arg is RoomMapInputBody {
   return (
     arg.rooms !== undefined
     && arg.rooms.every((it: any) => isRoom(it))
@@ -34,23 +33,25 @@ export class Api {
   constructor(calcPathService: CalcPathService) {
     this.app = express();
     this.calcPathSvc = calcPathService;
-
+    this.app.use(express.urlencoded({extended: true}));
+    this.app.use(express.json())
     this.app.get('/', (_: any, res: Response) => {
       res.status(200).send('Welcome!');
     });
 
-    this.app.get(
-      '/calcPath',
+    this.app.post(
+      '/calc-path',
       (
-        req: Request<any, any, any, InputParams>,
+        req: Request<any, any, RoomMapInputBody, InputQueryParams>,
         res: Response,
       ) => {
         try {
           const {
-            roomMap,
             startingRoom,
             objectsToCollect,
-          }: InputParams = req.query;
+          }: InputQueryParams = req.query;
+
+          const roomMap: RoomMapInputBody = req.body;
 
           this.checkIfAllParamsArePresent(
             roomMap,
@@ -61,7 +62,7 @@ export class Api {
 
           const {
             startingRoomParsed,
-            roomMapParsed,
+            rooms,
             objectsToCollectParsed,
           } = this.checkIfAllParamsHaveTheRightFormat(
             roomMap,
@@ -74,7 +75,7 @@ export class Api {
             'Parameters processed with success: calling calc path service...',
           );
           const result = this.calcPathSvc.calcPath(
-            roomMapParsed.rooms,
+            rooms,
             startingRoomParsed,
             objectsToCollectParsed,
           );
@@ -98,7 +99,7 @@ export class Api {
   }
 
   private checkIfAllParamsArePresent(
-    roomMap: string,
+    roomMap: RoomMapInputBody,
     startingRoom: string,
     objectsToCollect: string,
     res: Response,
@@ -110,13 +111,12 @@ export class Api {
   }
 
   private checkIfAllParamsHaveTheRightFormat(
-    roomMap: string,
+    roomMap: RoomMapInputBody,
     startingRoom: string,
     objectsToCollect: string,
     res: Response,
   ) {
-    const roomMapParsed: RoomMapInputParam = JSON.parse(roomMap);
-    if (!isRoomMapInputParam(roomMapParsed)) {
+    if (!isRoomMapInputParam(roomMap)) {
       logger.warn('Bad Param: roomMap');
       this.setWrongParamMessage(res, 'roomMap');
     }
@@ -138,7 +138,7 @@ export class Api {
       this.setWrongParamMessage(res, 'objectToCollect');
     }
 
-    if (startingRoomParsed > roomMapParsed.rooms.length) {
+    if (startingRoomParsed > roomMap.rooms.length) {
       logger.warn('Bad Param: startingRoom vs roomMap');
       this.setWrongParamMessage(
         res,
@@ -148,7 +148,7 @@ export class Api {
 
     return {
       startingRoomParsed,
-      roomMapParsed,
+      rooms: roomMap.rooms,
       objectsToCollectParsed,
     };
   }

@@ -1,8 +1,8 @@
 # Calc Path application
 
-The Calc Path application is written in Typescript on Node.js, using express to expose the API service `/calcPath`.
+The Calc Path application is written in Typescript on Node.js, using express to expose the API service `/calc-path`.
 
-The `calcPath` method has to be called in `GET` passing this list of query parameters:
+The `calc-path` method has to be called in `GET` passing this list of query parameters:
 
 - `roomMap`
 
@@ -14,30 +14,30 @@ Technically, the search algorithm for traversing the room graph is a "Depth-firs
 
 In the file `postman_collection.json` few samples of requests are present. They could be used for end-to-end tests (from POSTMAN client).
 
-### Installation
+## Installation
 
 Follow these instructions for installing dependencies, building, running tests, verifying source code format, and starting the application.
 
 ```sh
-$ npm install
-$ npm run build
-$ npm run test
-$ npm run lint
-$ npm run start
+npm install
+npm run build
+npm run test
+npm run lint
+npm run start
 ```
 
-### Docker commands
+## Docker commands
 
 From the application root, the docker commands used are listed below:
 
 ```sh
-$ docker build -t mytest .
-$ docker run -v $(pwd):/mnt -p 9090:9090 -w /mnt mytest ./scripts/build.sh
-$ docker run -v $(pwd):/mmt -p 9090:9090 -w /mnt mytest ./scripts/tests.sh
-$ docker run -v $(pwd):/mnt -p 9090:9090 -w /mnt mytest ./scripts/run.sh
+docker build -t mytest .
+docker run -v $(pwd):/mnt -p 9090:9090 -w /mnt mytest ./scripts/build.sh
+docker run -v $(pwd):/mmt -p 9090:9090 -w /mnt mytest ./scripts/tests.sh
+docker run -v $(pwd):/mnt -p 9090:9090 -w /mnt mytest ./scripts/run.sh
 ```
 
-### Plugins and libraries
+## Plugins and libraries
 
 For the implementation, I've used these libraries:
 
@@ -47,5 +47,5 @@ For the implementation, I've used these libraries:
 | Jest | Unit test library |
 | Supertest | For testing HTTP API |
 | TypeMoq | Mocking library |
-| TsLint | Code Formatter |
+| EsLint | Code Formatter |
 | Typescript Logging | Logging library |
