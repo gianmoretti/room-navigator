@@ -105,19 +105,7 @@ describe('API services test', () => {
     expect(result.text).toMatch(/Parameter format wrong/);
   });
 
-  it('POST calc-path API Request with wrong format roomMap object param', async () => {
-    const result = await request(cut)
-      .post('/calc-path')
-      .send({roomMap: '{"blabla": "bleble"}'})
-      .query({
-        startingRoom: '1',
-        objectsToCollect: 'Knife,Ball',
-      });
-    expect(result.status).toEqual(404);
-    expect(result.text).toEqual('Parameter format wrong - [roomMap]');
-  });
-
-  it('POST calc-path API Request with wrong format roomMap object param', async () => {
+  it('POST calc-path API Request with wrong format rooms body object', async () => {
     const inputRoomMap = {
       rooms: [
         {
