@@ -12,7 +12,7 @@ The `calc-path` method has to be called in `GET` passing this list of query para
 
 Technically, the search algorithm for traversing the room graph is a "Depth-first".
 
-In the file `postman_collection.json` few samples of requests are present. They could be used for end-to-end tests (from POSTMAN client).
+In the file `Room-Navigator.postman_collection.json` few samples of requests are present. They could be used for end-to-end tests (from POSTMAN client).
 
 ## Installation
 
@@ -22,7 +22,7 @@ Follow these instructions for installing dependencies, building, running tests, 
 npm install
 npm run build
 npm run test
-npm run lint
+npm run eslint
 npm run start
 ```
 
