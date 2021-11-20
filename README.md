@@ -2,13 +2,13 @@
 
 The Calc Path application is written in Typescript on Node.js, using express to expose the API service `/calc-path`.
 
-The `calc-path` method has to be called in `GET` passing this list of query parameters:
-
-- `roomMap`
+The `calc-path` method has to be called in `POST` passing this list of query parameters:
 
 - `startingRoom`
 
 - `objectsToCollect`
+
+and `roomMap` as JSON body.
 
 Technically, the search algorithm for traversing the room graph is a "Depth-first".
 
